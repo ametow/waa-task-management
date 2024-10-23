@@ -1,46 +1,69 @@
-import {Navigate, Route, BrowserRouter as Router, Routes, useNavigate} from 'react-router-dom';
-import './App.css';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import CreateTaskComponent from './Components/CreateTaskComponent';
+import ListTasksComponent from './Components/ListTasksComponent';
 import Dashboard from './Components/Dashboard';
 import Login from './Components/Login';
-import ProtectedRoute from "./Components/ProtectedRoute";
-import {useState} from "react";
+import ProtectedRoute from './Components/ProtectedRoute';
+import { getTasks } from './api/service/taskService' // Assuming you have these services defined
 
 export type User = {
-    username: string
-    token: string
-}
+    username: string;
+    token: string;
+};
 
 function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [user, setUser] = useState<User | null>(null);
+    const [tasks, setTasks] = useState([]);
 
-    const login = (user:User) => {
+    // Fetch tasks from the backend when the component mounts
+    useEffect(() => {
+        if (isAuthenticated) {
+            loadTasks();
+        }
+    }, [isAuthenticated]);
+
+    const loadTasks = async () => {
+        try {
+            const response = await getTasks(); // API call to get tasks
+            setTasks(response.data); // Assuming response.data is the list of tasks
+        } catch (error) {
+            console.error("Error fetching tasks:", error);
+        }
+    };
+
+    const login = (user: User) => {
         setUser(user);
-        setIsAuthenticated(true); // Set authentication to true on successful login
+        setIsAuthenticated(true);
     };
 
     const logout = () => {
-        setIsAuthenticated(false); // Set authentication to false on logout
+        setIsAuthenticated(false);
         setUser(null);
     };
 
+
+
     return (
-        <>
-            <Router>
-                <Routes>
-                    <Route path="/" element={<Login login={login}/>}/>
-                    <Route
-                        path="/dashboard"
-                        element={
-                            <ProtectedRoute isAuthenticated={isAuthenticated}>
-                                <Dashboard logout={logout} user={user}/>
-                            </ProtectedRoute>
-                        }
-                    />
-                    <Route path="*" element={<Navigate to="/dashboard"/>}/>
-                </Routes>
-            </Router>
-        </>
+        <Router>
+            <Routes>
+                <Route path="/" element={<Login login={login} />} />
+                <Route
+                    path="/dashboard"
+                    element={
+                        <ProtectedRoute isAuthenticated={isAuthenticated}>
+                            <>
+                                <Dashboard logout={logout} user={user} />
+                                <CreateTaskComponent  />
+                                <ListTasksComponent  />
+                            </>
+                        </ProtectedRoute>
+                    }
+                />
+                <Route path="*" element={<Navigate to="/" />} />
+            </Routes>
+        </Router>
     );
 }
 
