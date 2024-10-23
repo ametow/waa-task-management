@@ -3,7 +3,6 @@ import '../App.css';
 import {User} from "../App";
 import NotificationBar from "./NotificationBar";
 import {useNavigate} from "react-router-dom";
-import axios from "../api/axios";
 import {authAction} from "../api/service/taskService";
 
 interface PropsType {

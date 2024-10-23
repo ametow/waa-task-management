@@ -4,7 +4,6 @@ import Dashboard from './Components/Dashboard';
 import Login from './Components/Login';
 import ProtectedRoute from "./Components/ProtectedRoute";
 import {useState} from "react";
-import assert from "node:assert";
 
 export type User = {
     username: string
