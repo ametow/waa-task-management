@@ -1,4 +1,3 @@
-// ListTasksComponent.tsx
 import React from 'react';
 import { Task } from '../Task';
 import {deleteTask} from "../api/service/taskService"; // Import your Task type
@@ -15,21 +14,39 @@ const ListTasksComponent: React.FC<ListTasksComponentProps> = ({ tasks, onTaskDe
         onTaskDeleted(id); // Notify the parent that the task has been deleted
     };
 
+    function onEdit(task: Task) {
+
+    }
+
     return (
         <div>
             <h3>Task List</h3>
             {tasks.length === 0 ? (
                 <p>No tasks available</p>
             ) : (
-                <ul>
+                <table>
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
                     {tasks.map(task => (
-                        <li key={task.id}>
-
-                            <p>{task.name}</p>
-                            <button onClick={() => handleDeleteTask(task.id)}>Delete</button>
-                        </li>
+                        <tr key={task.id}>
+                            <td>{task.id}</td>
+                            <td>{task.name}</td>
+                            <td>{task.done ? 'Done' : 'Pending'}</td>
+                            <td>
+                                <button onClick={() => onEdit(task)}>Edit</button>
+                                <button onClick={() => handleDeleteTask(task.id)}>Delete</button>
+                            </td>
+                        </tr>
                     ))}
-                </ul>
+                    </tbody>
+                </table>
             )}
         </div>
     );

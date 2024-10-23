@@ -9,10 +9,9 @@ export const authAction = (action: string, payload: any) => {
     let url = action === 'Login' ? '/auth/login' : '/auth/register';
     return http.post(url, payload);
 }
-const API_URL = 'http://localhost:8080/tasks';
 
-export const getTasks = () => http.get(API_URL);
-export const getTaskById = (id: number) => http.get(`${API_URL}/${id}`);
-export const createTask = (task: NewTask) => http.post(API_URL, task);
-export const updateTask = (id: number, task: Task) => http.put(`${API_URL}/${id}`, task);
-export const deleteTask = (id: number) => http.delete(`${API_URL}/${id}`);
+export const getTasks = () => http.get('/tasks');
+export const getTaskById = (id: number) => http.get(`/tasks/${id}`);
+export const createTask = (task: NewTask) => http.post('/tasks', task);
+export const updateTask = (id: number, task: Task) => http.put(`tasks/${id}`, task);
+export const deleteTask = (id: number) => http.delete(`tasks/${id}`);

@@ -1,4 +1,3 @@
-// CreateTaskComponent.tsx
 import React, { useState } from 'react';
 
 import {NewTask, Task} from '../Task';
