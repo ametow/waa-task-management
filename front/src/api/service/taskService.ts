@@ -1,5 +1,5 @@
 import http from '../axios'
-import {Task} from "../../Task";
+import {NewTask, Task} from "../../Task";
 
 export const fetchTasks = () => {
     return http.get('/tasks');
@@ -13,6 +13,6 @@ const API_URL = 'http://localhost:8080/tasks';
 
 export const getTasks = () => http.get(API_URL);
 export const getTaskById = (id: number) => http.get(`${API_URL}/${id}`);
-export const createTask = (task: Task) => http.post(API_URL, task);
+export const createTask = (task: NewTask) => http.post(API_URL, task);
 export const updateTask = (id: number, task: Task) => http.put(`${API_URL}/${id}`, task);
 export const deleteTask = (id: number) => http.delete(`${API_URL}/${id}`);

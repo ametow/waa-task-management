@@ -1,6 +1,9 @@
-// Define Task type in taskService.ts or a types file
-export interface Task {
-    id?: number;  // Optional for new tasks
+export interface NewTask {
     name: string;
-    done: boolean;
+    done:boolean
+}
+
+// For tasks that have been created and assigned an ID
+export interface Task extends NewTask {
+    id: number;
 }

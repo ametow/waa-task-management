@@ -5,18 +5,29 @@ import ListTasksComponent from './Components/ListTasksComponent';
 import Dashboard from './Components/Dashboard';
 import Login from './Components/Login';
 import ProtectedRoute from './Components/ProtectedRoute';
-import { getTasks } from './api/service/taskService' // Assuming you have these services defined
+import { getTasks } from './api/service/taskService'
+import {Task} from "./Task";
+
 
 export type User = {
     username: string;
     token: string;
 };
 
+
+
 function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [user, setUser] = useState<User | null>(null);
-    const [tasks, setTasks] = useState([]);
 
+    const [tasks, setTasks] = useState<Task[]>([]); // State to manage tasks
+
+    const handleTaskCreated = (newTask: Task) => {
+        setTasks((prevTasks) => [...prevTasks, newTask]); // Add the new task
+    };
+    const handleTaskDeleted = (id: number) => {
+        setTasks((prevTasks) => prevTasks.filter(task => task.id !== id)); // Remove the deleted task
+    };
     // Fetch tasks from the backend when the component mounts
     useEffect(() => {
         if (isAuthenticated) {
@@ -55,8 +66,8 @@ function App() {
                         <ProtectedRoute isAuthenticated={isAuthenticated}>
                             <>
                                 <Dashboard logout={logout} user={user} />
-                                <CreateTaskComponent  />
-                                <ListTasksComponent  />
+                                <CreateTaskComponent onTaskCreated={handleTaskCreated} />
+                                <ListTasksComponent tasks={tasks} onTaskDeleted={handleTaskDeleted} />
                             </>
                         </ProtectedRoute>
                     }
