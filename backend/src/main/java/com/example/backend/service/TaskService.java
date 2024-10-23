@@ -6,7 +6,11 @@ import java.util.List;
 
 public interface TaskService {
     TaskJob createProduct(TaskJob taskJob);
+
     List<TaskJob> getAllTasks();
+
     void deleteTask(long id);
+
+    TaskJob updateTask(long id, TaskJob taskJob);
 }
 

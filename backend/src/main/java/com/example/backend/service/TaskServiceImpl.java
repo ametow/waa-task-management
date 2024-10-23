@@ -9,7 +9,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Service
-public class TaskServiceImpl implements TaskService{
+public class TaskServiceImpl implements TaskService {
 
     private final TaskRepository taskRepository;
 
@@ -27,5 +27,15 @@ public class TaskServiceImpl implements TaskService{
     public void deleteTask(long id) {
         taskRepository.deleteById(id);
     }
+
+    @Override
+    public TaskJob updateTask(long id, TaskJob taskDetails) {
+        TaskJob task = taskRepository.findById(id).orElseThrow();
+        task.setName(taskDetails.getName());
+        task.setDone(taskDetails.getDone());
+        return taskRepository.save(task);
+    }
+
+
 }
 
