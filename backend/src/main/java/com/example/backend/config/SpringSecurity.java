@@ -30,8 +30,8 @@ public class SpringSecurity {
             return http
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.DELETE, "/products/**").hasAuthority("admin")
                         .requestMatchers("/products/**").authenticated()
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .anyRequest().permitAll())
                 .csrf(AbstractHttpConfigurer::disable)
                 .build();

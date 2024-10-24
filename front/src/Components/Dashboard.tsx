@@ -17,9 +17,7 @@ export default function Dashboard({logout, user}:PropsType) {
 
     return (
         <div>
-            <h2>Dashboard</h2>
-            <p>Welcome to the protected dashboard!</p>
-            <p>You are logged in as {user?.username}</p>
+            <h2>Welcome, {user?.username}</h2>
             <button onClick={handleLogout}>Logout</button>
         </div>
     );

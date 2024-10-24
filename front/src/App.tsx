@@ -7,6 +7,7 @@ import Login from './Components/Login';
 import ProtectedRoute from './Components/ProtectedRoute';
 import {Provider} from "react-redux";
 import {store} from "./app/store";
+import axios from "./api/axios";
 
 
 export type User = {
@@ -17,17 +18,11 @@ export type User = {
 function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [user, setUser] = useState<User | null>(null);
-    // const dispatch = useAppDispatch();
-
-    // useEffect(() => {
-    //     if (isAuthenticated) {
-    //         dispatch(fetchTasks());
-    //     }
-    // }, [dispatch, isAuthenticated]);
 
     const login = (user: User) => {
         setUser(user);
         setIsAuthenticated(true);
+        axios.defaults.headers.common['Authorization'] = `Bearer ${user.token}`;
     };
 
     const logout = () => {

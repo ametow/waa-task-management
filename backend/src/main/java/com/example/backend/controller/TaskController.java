@@ -11,7 +11,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3000", allowedHeaders = "*")
 @RequestMapping("/tasks")
 public class TaskController {
 
@@ -33,8 +33,11 @@ public class TaskController {
         return ResponseEntity.ok(updatedUser);
     }
 
-    @GetMapping
-    public ResponseEntity<List<TaskJob>> getAllProducts() {
+    @GetMapping("")
+    public ResponseEntity<List<TaskJob>> getAllProducts(@RequestParam(required = false) String q) {
+        if (q != null) {
+            return ResponseEntity.ok(taskService.getAllTasks(q));
+        }
         return ResponseEntity.ok(taskService.getAllTasks());
     }
 

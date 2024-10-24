@@ -22,7 +22,7 @@ const CreateTaskComponent: React.FC = () => {
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Task Title"
             />
-
+            <hr />
             <button type="submit">Create Task</button>
         </form>
     );

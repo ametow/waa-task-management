@@ -20,8 +20,8 @@ const initialState: TaskState = {
     error: null,
 };
 
-export const fetchTasks = createAsyncThunk('tasks/fetchTasks', async () => {
-    const response = await getTasks();
+export const fetchTasks = createAsyncThunk('tasks/fetchTasks', async (query:string = '') => {
+    const response = await getTasks(query);
     return response.data;
 });
 

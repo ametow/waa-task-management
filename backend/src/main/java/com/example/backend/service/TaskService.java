@@ -9,6 +9,7 @@ public interface TaskService {
     TaskJob createProduct(TaskJob taskJob);
 
     List<TaskJob> getAllTasks();
+    List<TaskJob> getAllTasks(String q);
 
     void deleteTask(long id);
 
