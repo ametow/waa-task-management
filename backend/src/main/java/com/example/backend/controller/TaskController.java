@@ -1,6 +1,7 @@
 package com.example.backend.controller;
 
 import com.example.backend.model.TaskJob;
+import com.example.backend.model.User;
 import com.example.backend.service.TaskService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,12 @@ public class TaskController {
     @PostMapping
     public ResponseEntity<TaskJob> createProduct(@RequestBody TaskJob product) {
         return ResponseEntity.ok(taskService.createProduct(product));
+    }
+
+    @PutMapping("/{userId}/assignTask/{taskId}")
+    public ResponseEntity<User> assignTaskToUser(@PathVariable Long userId, @PathVariable Long taskId) {
+        User updatedUser = taskService.assignTaskToUser(userId, taskId);
+        return ResponseEntity.ok(updatedUser);
     }
 
     @GetMapping

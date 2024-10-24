@@ -1,7 +1,11 @@
 package com.example.backend.service;
 
+import com.example.backend.exception.TaskJobNotFoundException;
+import com.example.backend.exception.UserNotFoundException;
 import com.example.backend.model.TaskJob;
+import com.example.backend.model.User;
 import com.example.backend.repository.TaskRepository;
+import com.example.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +16,7 @@ import java.util.List;
 public class TaskServiceImpl implements TaskService {
 
     private final TaskRepository taskRepository;
+    private final UserRepository userRepository;
 
     @Override
     public TaskJob createProduct(TaskJob product) {
@@ -34,6 +39,20 @@ public class TaskServiceImpl implements TaskService {
         task.setName(taskDetails.getName());
         task.setDone(taskDetails.getDone());
         return taskRepository.save(task);
+    }
+
+    @Override
+    public User assignTaskToUser(Long userId, Long taskId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User with ID " + userId + " not found"));
+
+        TaskJob taskJob = taskRepository.findById(taskId)
+                .orElseThrow(() -> new TaskJobNotFoundException("TaskJob with ID " + taskId + " not found"));
+
+        taskJob.setUser(user);
+
+        taskRepository.save(taskJob);
+        return user;
     }
 
 
