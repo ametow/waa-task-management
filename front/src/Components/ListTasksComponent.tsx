@@ -1,26 +1,36 @@
-import React from 'react';
-import { Task } from '../Task';
-import {deleteTask} from "../api/service/taskService"; // Import your Task type
+import React, {useEffect} from 'react';
 
+import { useAppDispatch, useAppSelector } from '../app/hooks';
+import {fetchTasks, deleteTaskThunk, updateTaskThunk, selectTasks, Task} from '../features/tasks/taskSlice';
 
-interface ListTasksComponentProps {
-    tasks: Task[]; // Array of Task objects
-    onTaskDeleted: (id: number) => void; // Function to call when a task is deleted
-}
+const ListTasksComponent: React.FC = () => {
+    const dispatch = useAppDispatch();
+    const tasks = useAppSelector(selectTasks);
+    const loading = useAppSelector((state) => state.tasks.loading);
+    const error = useAppSelector((state) => state.tasks.error);
 
-const ListTasksComponent: React.FC<ListTasksComponentProps> = ({ tasks, onTaskDeleted }) => {
-    const handleDeleteTask = async (id: number) => {
-        await deleteTask(id); // Call the service to delete the task
-        onTaskDeleted(id); // Notify the parent that the task has been deleted
+    // Fetch tasks when component mounts
+    useEffect(() => {
+        dispatch(fetchTasks());
+    }, [dispatch]);
+
+    const handleTaskDeleted = (id: number) => {
+        dispatch(deleteTaskThunk(id));
     };
 
-    function onEdit(task: Task) {
-
-    }
+    const handleTaskEdited = (task: Task) => {
+        const newName = prompt('Edit task name', task.name);
+        if (newName) {
+            dispatch(updateTaskThunk({ ...task, name: newName }));
+        }
+    };
 
     return (
         <div>
             <h3>Task List</h3>
+            {loading && <p>Loading tasks...</p>}
+            {error && <p>Error: {error}</p>}
+
             {tasks.length === 0 ? (
                 <p>No tasks available</p>
             ) : (
@@ -40,8 +50,8 @@ const ListTasksComponent: React.FC<ListTasksComponentProps> = ({ tasks, onTaskDe
                             <td>{task.name}</td>
                             <td>{task.done ? 'Done' : 'Pending'}</td>
                             <td>
-                                <button onClick={() => onEdit(task)}>Edit</button>
-                                <button onClick={() => handleDeleteTask(task.id)}>Delete</button>
+                                <button onClick={() => handleTaskEdited(task)}>Edit</button>
+                                <button onClick={() => handleTaskDeleted(task.id)}>Delete</button>
                             </td>
                         </tr>
                     ))}

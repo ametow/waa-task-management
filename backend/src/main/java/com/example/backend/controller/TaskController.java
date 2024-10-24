@@ -21,6 +21,11 @@ public class TaskController {
     public ResponseEntity<TaskJob> createProduct(@RequestBody TaskJob product) {
         return ResponseEntity.ok(taskService.createProduct(product));
     }
+    @PutMapping("/{id}")
+    public ResponseEntity<TaskJob> editTask(@PathVariable Long id, @RequestBody TaskJob taskJob) {
+        var res = taskService.updateTask(id, taskJob);
+        return ResponseEntity.ok(res);
+    }
 
     @PutMapping("/{userId}/assignTask/{taskId}")
     public ResponseEntity<User> assignTaskToUser(@PathVariable Long userId, @PathVariable Long taskId) {

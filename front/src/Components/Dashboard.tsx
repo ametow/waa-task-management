@@ -1,5 +1,6 @@
 import {useNavigate} from "react-router-dom";
 import {User} from "../App";
+import './dashboard.css'
 
 interface PropsType {
     user: User | null;

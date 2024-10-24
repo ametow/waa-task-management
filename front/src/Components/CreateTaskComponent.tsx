@@ -1,20 +1,16 @@
 import React, { useState } from 'react';
+import {useAppDispatch} from "../app/hooks";
+import {createTaskThunk} from "../features/tasks/taskSlice";  // Import the NewTask type
 
-import {NewTask, Task} from '../Task';
-import {createTask} from "../api/service/taskService";  // Import the NewTask type
-
-interface CreateTaskComponentProps {
-    onTaskCreated: (newTask: Task) => void;
-}
-
-const CreateTaskComponent: React.FC<CreateTaskComponentProps> = ({ onTaskCreated }) => {
+const CreateTaskComponent: React.FC = () => {
     const [name, setName] = useState('');
+    const dispatch = useAppDispatch();
 
     const handleCreateTask = async (e: React.FormEvent) => {
         e.preventDefault();
-        const newTask: NewTask = { name, done: false };
-        const response = await createTask(newTask);
-        onTaskCreated(response.data);  // Now this task has an id
+        const newTask: any = { name, done: false };
+        dispatch(createTaskThunk(newTask));
+        setName('');
     };
 
     return (
