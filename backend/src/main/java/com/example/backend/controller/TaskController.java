@@ -47,4 +47,12 @@ public class TaskController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("")
+    public ResponseEntity<List<TaskJob>> getAllProducts(
+            @RequestParam(required = false) String q,
+            @RequestParam(required = false) Boolean status
+    ) {
+        return ResponseEntity.ok(taskService.getAllTasks(q, status));
+    }
+
 }

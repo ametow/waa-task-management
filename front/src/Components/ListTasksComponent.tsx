@@ -1,10 +1,10 @@
 import React, {useEffect, useState, FC} from 'react';
-
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import {fetchTasks, deleteTaskThunk, updateTaskThunk, selectTasks, Task} from '../features/tasks/taskSlice';
 
 const ListTasksComponent: FC = () => {
     const [search, setSearch] = useState('');
+    const [statusFilter, setStatusFilter] = useState<string>('all');  // Changed to string with 'all' default
     const dispatch = useAppDispatch();
     const tasks = useAppSelector(selectTasks);
     const loading = useAppSelector((state) => state.tasks.loading);
@@ -33,23 +33,44 @@ const ListTasksComponent: FC = () => {
         setSearch(e.target.value);
     }
 
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            dispatch(fetchTasks(search));
-        }, 500);
-        return () => clearTimeout(timer);
-    }, [dispatch, search]);
+    // Filter tasks based on search and status
+    const filteredTasks = tasks.filter(task => {
+        const matchesSearch = task.name.toLowerCase().includes(search.toLowerCase());
+        const matchesStatus =
+            statusFilter === 'all' ? true :
+                statusFilter === 'done' ? task.done :
+                    statusFilter === 'pending' ? !task.done :
+                        true;
+
+        return matchesSearch && matchesStatus;
+    });
 
     return (
         <div>
             <h3>Task List</h3>
 
-            <input type="text" placeholder="Search tasks" onChange={handleSearchChange} value={search} />
+            <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
+                <input
+                    type="text"
+                    placeholder="Search tasks"
+                    onChange={handleSearchChange}
+                    value={search}
+                />
+
+                <select
+                    value={statusFilter}
+                    onChange={(e) => setStatusFilter(e.target.value)}
+                >
+                    <option value="all">All Status</option>
+                    <option value="done">Done</option>
+                    <option value="pending">Pending</option>
+                </select>
+            </div>
 
             {loading && <p>Loading tasks...</p>}
             {error && <p>Error: {error}</p>}
 
-            {tasks.length === 0 ? (
+            {filteredTasks.length === 0 ? (
                 <p>No tasks available</p>
             ) : (
                 <table>
@@ -62,7 +83,7 @@ const ListTasksComponent: FC = () => {
                     </tr>
                     </thead>
                     <tbody>
-                    {tasks.map(task => (
+                    {filteredTasks.map(task => (
                         <tr key={task.id}>
                             <td>{task.id}</td>
                             <td>{task.name}</td>

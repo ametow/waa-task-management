@@ -16,5 +16,8 @@ public interface TaskService {
     User assignTaskToUser(Long userId, Long taskId);
 
     TaskJob updateTask(long id, TaskJob taskJob);
+
+    public List<TaskJob> getAllTasks(String name, Boolean status) ;
+
 }
 

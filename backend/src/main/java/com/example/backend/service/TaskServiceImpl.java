@@ -59,7 +59,13 @@ public class TaskServiceImpl implements TaskService {
         taskRepository.save(taskJob);
         return user;
     }
-
+    @Override
+    public List<TaskJob> getAllTasks(String searchTerm, Boolean status) {
+        if (searchTerm != null || status != null) {
+            return taskRepository.searchTasks(searchTerm, status);
+        }
+        return taskRepository.findAll();
+    }
 
 }
 
